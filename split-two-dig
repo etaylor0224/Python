@@ -1,0 +1,8 @@
+#take two digit number and split the numbers and add them together
+
+two_digit_number = input()
+num = two_digit_number
+num1 = num[0]
+num2 = num[1]
+add = int(num1)+ int(num2)
+print(add)
