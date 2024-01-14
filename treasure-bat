@@ -34,11 +34,13 @@ if crossroad == "left":
         if island == "blue":
             print("Congratulations you have found the hidden treasure of Batman. You win!!!")
         elif island == "yellow":
-            print("You have opened the yellow chest. Out come flying hundreds of bats. The other two chests disappear")
+            print("You have opened the yellow chest. Out come flying hundreds of bats. The other two chests disappear. The End")
         elif island == "red":
-            print("You open the rest chest. It is dark you reach deep down and fall into a cavern.")
+            print("You open the red chest. It is dark you reach deep down and fall into a cavern. The End")
+        else:
+            print("All the chests disappear. Game Over.")
     else:
-        print("You are swimming into and get lost. The End")
+        print("You are lost. The End")
 
 else:
     print("You have fallen in a hole. The End")
