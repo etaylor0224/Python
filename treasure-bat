@@ -25,12 +25,12 @@ print('''
 print("Welcome to Treasure Island")
 print("You're mission is to find the treasure.")
 
-crossroad = input("You are at a crossroads. Do you go left or right? \n")
+crossroad = input("You are at a crossroads. Do you go left or right? \n").lower()
 
 if crossroad == "left":
-    lake = input('You have turned left. You have now wandered through the forest and arrived at a lake. Would you like to "swim" or "wait"? \n')
+    lake = input('You have turned left. You have now wandered through the forest and arrived at a lake. Would you like to "swim" or "wait"? \n').lower()
     if lake == "wait":
-        island = input("You have taken the boat to the island. You find 3 chest. 1 red, 1 yellow, 1 blue. Which would you like to open? \n")
+        island = input("You have taken the boat to the island. You find 3 chest. 1 red, 1 yellow, 1 blue. Which would you like to open? \n").lower()
         if island == "blue":
             print("Congratulations you have found the hidden treasure of Batman. You win!!!")
         elif island == "yellow":
@@ -41,4 +41,4 @@ if crossroad == "left":
         print("You are swimming into and get lost. The End")
 
 else:
-    print("You turn right and fall in a hole. The End")
+    print("You have fallen in a hole. The End")
