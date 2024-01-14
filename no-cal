@@ -1,0 +1,32 @@
+print("Welcome Jon. Please answer the following questions to pick your new state.")
+
+cost = input("Do you want cheaper than Cali? \n")
+if cost == "yes":
+    print("Of course you do, why else would be here.")
+    weather = input("Do you like warm weather?\n")
+    if weather == "yes":
+        print("NM is OUT!!!")
+        rain = input("Do you like storms? \n")
+        if rain == "yes":
+            print("Ahhh you have narrowed down the choices.")
+            tornadoes = input("Do you mind tornadoes? \n")
+            if tornadoes == "yes":
+                print("AL is OUT!!!")
+                crazy_people = input("Do you like crazy people? \n")
+                if crazy_people == "yes":
+                    print("FL is OUT!!!")
+                    hurricanes = input("Do you mind hurricanes? \n")
+                    if hurricanes == "yes":
+                        print("Hurricanes are fun!!!")
+                        straw = input("Do you like plastic straws? \n")
+                        if straw == "yes":
+                            print("It is helpful to the turtles")
+                    if hurricanes == "no":
+                        print("Nothing to be scared of just alot of wind and rain. Hurricanes are fun anyway")
+                        straw = input("Do you like plastic straws? \n")
+                        if straw == "yes":
+                            print("It is helpful to the turtles")
+                            print("I cant tell you where to move your life thats your call big homie. <3")
+                    
+else:
+    print("I cant tell you where to move your life thats your call big homie. <3")
