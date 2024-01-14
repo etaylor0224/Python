@@ -1,0 +1,33 @@
+name1 = input("Enter name 1: ")
+name2 = input("Enter name 2: ")
+
+total_true = 0
+total_love = 0
+
+combined_name = name1.lower() + name2.lower()
+
+if combined_name.count("t") > 0:
+    total_true += combined_name.count("t")
+if combined_name.count("r") > 0:
+    total_true += combined_name.count("r")
+if combined_name.count("u") > 0:
+    total_true += combined_name.count("u")
+if combined_name.count("e") > 0:
+    total_true += combined_name.count("e")
+if combined_name.count("l") > 0:
+    total_love += combined_name.count("l")
+if combined_name.count("o") > 0:
+    total_love += combined_name.count("o")
+if combined_name.count("v") > 0:
+    total_love += combined_name.count("v")
+if combined_name.count("e") > 0:
+    total_love += combined_name.count("e")
+
+score = int((f"{total_true}{total_love}"))
+
+if score < 10 or score > 90:
+    print(f"Your score is {score}, you go together like coke and mentos.")
+elif score >= 40 and score <= 50:
+    print(f"Your score is {score}, you are alright together.")
+else:
+    print(f"Your score is {score}.")
