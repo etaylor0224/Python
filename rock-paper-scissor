@@ -1,0 +1,30 @@
+import random
+
+choices = ["rock", "paper", "scissors"]
+player_choice = input(f"Would you like {choices}? \n").lower()
+
+comp_choice = random.choice(choices)
+
+print(f"Player chose: {player_choice}")
+print(f"Computer chose: {comp_choice}")
+if player_choice == "rock":
+    if comp_choice == "rock":
+        print("Tie")
+    elif comp_choice == "paper":
+        print("Paper covers rock. You lose.")
+    elif comp_choice == "scissors":
+        print("Rock smashes scissors. You win")
+if player_choice == "paper":
+    if comp_choice == "rock":
+        print("Paper covers rock. You win.")
+    elif comp_choice == "paper":
+        print("Tie")
+    elif comp_choice == "scissors":
+        print("Scissors cuts paper. You lose.")
+if player_choice == "scissors":
+    if comp_choice == "rock":
+        print("Rock smashes scissors. You lose")
+    elif comp_choice == "paper":
+        print("Scissors cuts paper. You win.")
+    elif comp_choice == "scissors":
+        print("Tie.")
