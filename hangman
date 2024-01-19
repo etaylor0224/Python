@@ -1,0 +1,95 @@
+import random
+stages = ['''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ / \  |
+      |
+=========
+''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ /    |
+      |
+=========
+''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+      |
+      |
+=========
+''', '''
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========
+''', '''
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========
+''', '''
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========
+''']
+
+word_list = ["ardvark", "baboon", "camel"]
+
+chosen_word = random.choice(word_list)
+chosen_word_list = list(chosen_word)
+display = []
+#word_length = len(chosen_word)
+
+
+lives = 6
+#lives start at 6 end at 0
+
+
+for dashes in range(len(chosen_word)):
+    display.append("_")
+    #can also do display += "_"
+#for _ in chosen_word:
+    #display += "_"
+print(display)
+print(lives)
+
+while "_" in display and lives != 0:
+    user_guess = input("Guess a letter: ")
+    for position in range(len(chosen_word)):
+        check = chosen_word[position]
+        if check.lower() == user_guess.lower():
+            display[position] = check
+
+    if user_guess not in chosen_word_list:
+        lives -= 1
+
+    print(f"{' '.join(display)}")
+    print(stages[lives])
+
+if lives > 0:
+    print(f"You won the word was {chosen_word}.")
+else:
+    print(f"You lose the word was {chosen_word}.")
