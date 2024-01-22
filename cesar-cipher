@@ -1,30 +1,43 @@
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+def loop():
+    def caesar(direction, text, shift):
+        not_alpha = list(text)
+        place_holder = []
+        alpha = []
+        for n in text:
+            if n not in alphabet:
+                place_holder.append(n)
+                removed = not_alpha.index(n)
+            elif n in alphabet:
+                alpha.append(n)
 
-direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n").lower()
-text = input("Type your message:\n").lower()
-shift = int(input("Type the shift number:\n"))
-
-def encrypt(text, shift):
-    encoded_text = ""
-    for i in text:
-        enc_txt = alphabet.index(i)
-        cipher = enc_txt + shift
-        if cipher > 25:
-            cipher = cipher - 26
-            encoded_text += (alphabet[cipher])
-        else:
-            encoded_text += (alphabet[cipher])
-    print(f"The encoded text is: {encoded_text}")
-def decrypt(text, shift):
-    dencoded_text = ""
-    for i in text:
-        denc_txt = alphabet.index(i)
-        cipher = denc_txt - shift
-        dencoded_text += (alphabet[cipher])
-    print(f"The dencoded text is: {dencoded_text}")
+        end_text = ""
+        if direction == "decode":
+            shift *= -1
+        for i in alpha:
+            enc_txt = alphabet.index(i)
+            cipher = enc_txt + shift
+            if cipher > 25:
+                cipher = cipher - 26
+                end_text += (alphabet[cipher])
+            else:
+                end_text += (alphabet[cipher])
 
 
-if direction == "encode":
-    encrypt(text, shift)
-else:
-    decrypt(text, shift)
+        end_text_list = list(end_text)
+        end_text_list.insert(removed,place_holder)
+        #end_text_1 = end_text_list.join(" ")
+        print(f"The {direction}d text is: {end_text}")
+        print(end_text_list)
+    direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n").lower()
+    text = input("Type your message:\n").lower()
+    shift = int(input("Type the shift number:\n"))
+
+    caesar(direction=direction, text=text, shift=shift)
+loop()
+while True:
+    again = input("Would you like to restart the program? Yes/No: \n").lower()
+    if again != "yes":
+        break
+    else:
+        loop()
