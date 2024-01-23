@@ -1,32 +1,22 @@
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 def loop():
     def caesar(direction, text, shift):
-        not_alpha = list(text)
-        place_holder = ""
-        alpha = []
-        for n in text:
-            if n not in alphabet:
-                place_holder += n
-                removed = not_alpha.index(n)
-            elif n in alphabet:
-                alpha.append(n)
-
         end_text = ""
         if direction == "decode":
             shift *= -1
-        for i in alpha:
-            enc_txt = alphabet.index(i)
-            cipher = enc_txt + shift
-            if cipher > 25:
-                cipher = cipher - 26
-                end_text += (alphabet[cipher])
+        for i in text:
+            if i in alphabet:
+                enc_txt = alphabet.index(i)
+                cipher = enc_txt + shift
+                if cipher > 25:
+                    cipher = cipher - 26
+                    end_text += (alphabet[cipher])
+                else:
+                    end_text += (alphabet[cipher])
             else:
-                end_text += (alphabet[cipher])
+                end_text += i
 
 
-        end_text_list = list(end_text)
-        end_text_list.insert(removed,place_holder)
-        end_text = "".join(end_text_list)
         print(f"The {direction}d text is: {end_text}")
 
 
