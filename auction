@@ -1,0 +1,35 @@
+import os
+#clear utilizing CLS for some reason does not work....need to fix :)
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
+
+print("Welcome to the secret auction program.")
+
+bid_dict = {}
+def bidding():
+    cls()
+    bidder_name = input("What is your name?: ")
+    bid_amount = int(input("What is your bid?: "))
+    bid_dict[bidder_name] = bid_amount
+bidding()
+
+while True:
+    again = input("Are there any other bidders? Please answer 'Yes' or 'No'").lower()
+    if again != "yes":
+        break
+    else:
+        bidding()
+
+for name in bid_dict:
+    win_amount = 0
+    win_name = ""
+    if bid_dict[name] > win_amount:
+        win_amount += bid_dict[name]
+        win_name += name
+
+print(f"Winner name is {win_name} with the amount of {win_amount}")
+
+
+
+
+
