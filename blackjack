@@ -14,11 +14,13 @@ def deal(player_cards, dealer_cards):
          dealer_cards.append(random.choice(cards))
 
 def score(player_score):
+    """Player total count of cards"""
     for total in player_cards:
         player_score += total
     return(player_score)
 
 def deal_score(dealer_score):
+    """Dealer total count of cards"""
     for total in dealer_cards:
         dealer_score += total
     return dealer_score
@@ -27,6 +29,7 @@ deal(player_cards, dealer_cards)
 print(f"Dealer is showing : {dealer_cards[0]}")
 print(f"Player cards are : {player_cards} Your score is {score(player_score)}")
 
+#Check if your score is lower than 21
 while score(player_score) < 21:
     if score(player_score) > 21:
         print("Bust. Dealer Wins")
@@ -38,8 +41,11 @@ while score(player_score) < 21:
         print(f"Your cards are {player_cards} with a total of {score(player_score)}.")
         break
 
+#Dealer force draw if under 17
 while deal_score(dealer_score)< 17:
     dealer_cards.append(random.choice(cards))
+
+#If dealer is under 21 compare to find highest score
 if deal_score(dealer_score) < 21:
     if score(player_score) > deal_score(dealer_score):
         print(f"The dealer had {deal_score(dealer_score)}. You win!!")
@@ -47,5 +53,7 @@ if deal_score(dealer_score) < 21:
         print("Push")
     elif score(player_score) < deal_score(dealer_score):
         print(f"The dealer had {deal_score(dealer_score)}. You Lost")
+
+#if dealer over 21 dealer busts
 elif deal_score(dealer_score) >21:
-    print(f"The dealer busted {deal_score(dealer_score)}. You win!!")
+    print(f"The dealer busted {dealer_cards} {deal_score(dealer_score)}. You win!!")
