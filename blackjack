@@ -1,0 +1,26 @@
+import random
+
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
+dealer_cards = []
+player_cards = []
+
+dealer_score = ""
+player_score = ""
+
+def deal():
+    """This will deal cards for both the dealer and the player"""
+    for dealt in range(2):
+        player_cards.append(random.choice(cards))
+        dealer_cards.append(random.choice(cards))
+
+def score(player_score):
+
+    player_score += player_cards[0] + player_cards[1]
+
+
+
+deal()
+score(player_score)
+print(f"Dealer cards are : {dealer_cards[0]}")
+print(f"Player cards are : {player_cards} Your score is {player_score}")
