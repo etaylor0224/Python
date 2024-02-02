@@ -4,23 +4,48 @@ cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
 dealer_cards = []
 player_cards = []
+dealer_score = 0
+player_score = 0
 
-dealer_score = ""
-player_score = ""
-
-def deal():
+def deal(player_cards, dealer_cards):
     """This will deal cards for both the dealer and the player"""
     for dealt in range(2):
-        player_cards.append(random.choice(cards))
-        dealer_cards.append(random.choice(cards))
+         player_cards.append(random.choice(cards))
+         dealer_cards.append(random.choice(cards))
 
 def score(player_score):
+    for total in player_cards:
+        player_score += total
+    return(player_score)
 
-    player_score += player_cards[0] + player_cards[1]
+def deal_score(dealer_score):
+    for total in dealer_cards:
+        dealer_score += total
+    return dealer_score
 
+deal(player_cards, dealer_cards)
+print(f"Dealer is showing : {dealer_cards[0]}")
+print(f"Player cards are : {player_cards} Your score is {score(player_score)}")
 
+while score(player_score) < 21:
+    if score(player_score) > 21:
+        print("Bust. Dealer Wins")
+    hit = input(f"Your score is {score(player_score)} would you like to hit or stay?: ").lower()
+    if hit == "hit":
+        player_cards.append(random.choice(cards))
+        print(f"Your cards are {player_cards}. Your score is {score(player_score)}.")
+    elif hit == "stay":
+        print(f"Your cards are {player_cards} with a total of {score(player_score)}.")
+        break
 
-deal()
-score(player_score)
-print(f"Dealer cards are : {dealer_cards[0]}")
-print(f"Player cards are : {player_cards} Your score is {player_score}")
+while deal_score(dealer_score)< 17:
+    dealer_cards.append(random.choice(cards))
+if deal_score(dealer_score) < 21:
+    if score(player_score) > deal_score(dealer_score):
+        print(f"The dealer had {deal_score(dealer_score)}. You win!!")
+    elif score(player_score) == deal_score(dealer_score):
+        print("Push")
+    elif score(player_score) < deal_score(dealer_score):
+        print(f"The dealer had {deal_score(dealer_score)}. You Lost")
+elif deal_score(dealer_score) >21:
+    print(f"The dealer busted {deal_score(dealer_score)}. You win!!")
