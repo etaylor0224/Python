@@ -15,7 +15,8 @@ difficulty = input("Choose a difficulty. Type 'easy' or 'hard': ")
 
 turns = 0
 comp = random.randint(1, 100)
-print(comp)
+#Uncomment next line for debugging purposes. Reveals answer
+#print(comp)
 
 def lives():
     global turns
