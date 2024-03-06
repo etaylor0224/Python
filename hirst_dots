@@ -1,0 +1,38 @@
+import colorgram
+import turtle
+import random
+#For new colors uncomment the code
+
+#colors = colorgram.extract("all-pokemon-pictures.jpg", 30)
+#colors_rgb = []
+#for select in colors:
+#    r = select.rgb.r
+#    b = select.rgb.b
+#    g = select.rgb.g
+#    rgb = (r,g,b)
+#    colors_rgb.append(rgb)
+color_list = [(139, 91, 61), (193, 162, 112), (69, 94, 118), (228, 6, 14), (232, 215, 111), (133, 166, 185),
+ (151, 156, 56), (127, 73, 94), (131, 174, 150), (212, 14, 7), (51, 36, 22), (66, 110, 88), (212, 233, 228),
+ (210, 222, 232), (173, 143, 169), (31, 42, 56), (207, 82, 65), (55, 29, 39), (25, 43, 32), (93, 150, 109), (192, 83, 100),
+ (76, 78, 26), (45, 61, 92), (42, 80, 60), (120, 216, 240), (167, 207, 188), (74, 149, 165), (116, 123, 147)]
+
+paint = turtle.Turtle()
+turtle.colormode(255)
+#10 x 10 rows of spots
+#dots 20 spaced 50 paces
+paint.teleport(-200,-300)
+paint.penup()
+def dot_draw_line():
+    for _ in range(10):
+     paint.dot(20, random.choice(color_list))
+     paint.forward(50)
+
+dot_draw_line()
+y = -300
+for _ in range(9):
+    y += + 50
+    paint.teleport(-200,y)
+    dot_draw_line()
+
+screen = turtle.Screen()
+screen.exitonclick()
