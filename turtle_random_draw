@@ -1,0 +1,52 @@
+####RANDOM WALK####
+import turtle
+import random
+
+timmy_turtle = turtle.Turtle()
+turtle.colormode(255)
+def random_color():
+    r = random.randint(0,255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    return (r,g,b)
+
+num_moves = random.randint(50,200)
+direction = [0, 90, 180, 270]
+timmy_turtle.pensize(10)
+timmy_turtle.speed("slow")
+
+for _ in range (num_moves):
+    timmy_turtle.color(random_color())
+    timmy_turtle.forward(50)
+    timmy_turtle.setheading(random.choice(direction))
+
+screen = Screen()
+screen.exitonclick()
+
+
+#### Spiralgraph ####
+import turtle
+import random
+
+timmy_turtle = turtle.Turtle()
+turtle.colormode(255)
+def random_color():
+    r = random.randint(0,255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    return (r,g,b)
+
+timmy_turtle.speed("fastest")
+
+
+def draw_circles(size_of_gap):
+    for _ in range(int(360 / size_of_gap)):
+        timmy_turtle.color(random_color())
+        timmy_turtle.circle(100)
+        # Two different ways to do it, utilizing heading or just turning left
+        #timmy_turtle.setheading(timmy_turtle.heading()+size_of_gap)
+        timmy_turtle.left(size_of_gap)
+
+draw_circles(5)
+screen = turtle.Screen()
+screen.exitonclick()
