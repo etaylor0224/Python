@@ -1,0 +1,13 @@
+import pandas as pd
+
+#{key:value for (index, row) in df.itterows()}
+'''Create a dict in format:
+{key = letter (ex "A": value = phonetic word (ex "Alpha") 
+create a list of phonetic code words from a user input :) 
+'''
+df = pd.read_csv("nato_phonetic_alphabet.csv")
+word = input("Enter a word: ").upper()
+word_lst = [letter for letter in word]
+final = [row.code for letter in word_lst for (index, row) in df.iterrows() if letter == row.letter]
+
+print(final)
