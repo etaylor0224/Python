@@ -13,10 +13,9 @@ import random
 
 # 4. Send the letter generated in step 3 to that person's email address.
 
-now = dt.datetime.now()
 df = pd.read_csv("birthdays.csv")
-date_month = now.month
-date_day = now.day
+date_month = dt.datetime.now().month
+date_day = dt.datetime.now().day
 placeholder = "[NAME]"
 email = "email@test.com"
 password = "notarealpassword"
