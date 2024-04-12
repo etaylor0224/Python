@@ -24,6 +24,7 @@ letter_choice = random.randint(1,3)
 for (index, row) in df.iterrows():
     if row.month == date_month and row.day == date_day:
         bday_name = df.name[index]
+        bday_email = df.email[index]
 
 with open(fr"letter_templates\letter_{letter_choice}.txt") as letter_data:
     letter = letter_data.read()
@@ -35,5 +36,5 @@ with smtplib.SMTP("smtp.test.com", port=587) as connection:
     connection.login(user=my_email, password=password)
     connection.sendmail(
         from_addr=my_email,
-        to_addrs="birthday@person.com",
+        to_addrs=f"{bday_email}",
         msg=f"Subject:Happy Birthday\n\n{letter_temp}")
