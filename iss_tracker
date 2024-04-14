@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 import smtplib
+import time
 
 my_lat = 30.275194
 my_long = -89.781174
@@ -36,23 +37,18 @@ def sun_status():
         return True
     else:
         return False
-run = True
-while run:
-    time = datetime.now().second
-    if time == 59:
-        sun = sun_status()
-        iss_status = iss_close()
-        if iss_status == True and sun == True:
-            with smtplib.SMTP("smtp.test.com", port=587) as connection:
-                connection.starttls()
-                connection.login(user=send_email, password=send_pass)
-                connection.sendmail(
-                    from_addr=send_email,
-                    to_addrs=receive_email,
-                    msg=f"Subject:ISS CLOSE\n\nLook up the ISS is above."
-                )
-        else:
-            print("false")
+while True:
+    time.sleep(60)
+    sun = sun_status()
+    iss_status = iss_close()
+    if iss_status == True and sun == True:
+        with smtplib.SMTP("smtp.test.com", port=587) as connection:
+            connection.starttls()
+            connection.login(user=send_email, password=send_pass)
+            connection.sendmail(
+                from_addr=send_email,
+                to_addrs=receive_email,
+                msg=f"Subject:ISS CLOSE\n\nLook up the ISS is above."
+            )
     else:
-        pass
-
+        print("false")
