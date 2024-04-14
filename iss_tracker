@@ -1,0 +1,59 @@
+import requests
+from datetime import datetime
+import smtplib
+
+my_lat = 30.275194
+my_long = -89.781174
+iss_url = "http://api.open-notify.org/iss-now.json"
+sun_url = "https://api.sunrise-sunset.org/json"
+send_email = "sender@test.com"
+send_pass = "notarealpassword"
+receive_email = "test@test.com"
+def iss_close():
+    response = requests.get(url=iss_url)
+    response.raise_for_status()
+    data = response.json()
+    iss_latitude = float(data["iss_position"]["latitude"])
+    iss_longitude = float(data["iss_position"]["longitude"])
+    if -25 <= iss_latitude <= 35:
+        if -94 <= iss_longitude <= -84:
+            return True
+    else:
+        return False
+
+def sun_status():
+    parameters = {
+        "lat": my_lat,
+        "lng": my_long,
+        "formatted": 0
+                  }
+    sun_response = requests.get(url=sun_url, params=parameters)
+    sun_response.raise_for_status()
+    sun_data = sun_response.json()
+    sunrise = int(sun_data["results"]["sunrise"].split("T")[1].split(":")[0])
+    sunset = int(sun_data["results"]["sunset"].split("T")[1].split(":")[0])
+    now = datetime.now().hour
+    if sunrise < now > sunset:
+        return True
+    else:
+        return False
+run = True
+while run:
+    time = datetime.now().second
+    if time == 59:
+        sun = sun_status()
+        iss_status = iss_close()
+        if iss_status == True and sun == True:
+            with smtplib.SMTP("smtp.test.com", port=587) as connection:
+                connection.starttls()
+                connection.login(user=send_email, password=send_pass)
+                connection.sendmail(
+                    from_addr=send_email,
+                    to_addrs=receive_email,
+                    msg=f"Subject:ISS CLOSE\n\nLook up the ISS is above."
+                )
+        else:
+            print("false")
+    else:
+        pass
+
