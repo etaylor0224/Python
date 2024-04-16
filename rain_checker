@@ -1,0 +1,34 @@
+import requests
+from twilio.rest import Client
+
+lat = 41.222759
+lon = -111.970421
+api_key = "dopenweatherapikey"
+account_sid = "twilioaccountsid"
+auth_token = "twilioauthtoken"
+
+url = f"https://api.openweathermap.org/data/2.5/forecast"
+
+call = requests.get(url=url, params={
+    "lat": lat,
+    "lon": lon,
+    "cnt": 4,
+    "appid": api_key,
+})
+call.raise_for_status()
+data = call.json()
+
+#if id < 700
+for code in data["list"]:
+    condition = code["weather"][0]["id"]
+    if condition < 700:
+        umbrella = True
+if umbrella:
+    client = Client(account_sid, auth_token)
+    message = client.messages \
+        .create(
+        body="Bring an Umbrella",
+        from_='+18555551234',
+        to='+15551234567'
+    )
+    print("Bring an Umbrella")
