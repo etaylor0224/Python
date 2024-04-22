@@ -1,0 +1,27 @@
+from flight_data import FlightData
+from flight_search import FlightSearch
+#This file will need to use the DataManager,FlightSearch, FlightData, NotificationManager classes to achieve the program requirements.
+
+
+
+
+
+flightdata = FlightData()
+
+# for loc in flightdata.flight_code:
+#     search = FlightSearch(loc)
+#     print(search.output)
+
+loc = flightdata.flight_code[0]
+search = FlightSearch(loc)
+search_result = search.output
+results = search_result["data"]
+for x in range(len(results)):
+    cost = results[x]["price"]
+    
+    #search = flightdata.flight_df[(cond_1) & (cond_2)]
+    #print(results[x])
+    # if cost < flightdata.flight_budget:
+    #     price_lst.append(cost)
+#print(price_lst)
+#print(search.output)
