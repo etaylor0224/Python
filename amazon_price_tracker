@@ -1,0 +1,31 @@
+from bs4 import BeautifulSoup
+import requests
+
+
+price_limit = 349.99
+
+url = ("https://www.amazon.com/Lian-Li-V3000-White-Tower/dp/B0BN3TZR5G/ref=sr_1_1?crid=2GCRI3KCHJ0LF&dib=eyJ2IjoiMSJ9"
+       ".9N_sSd8XLmhvgPiaqEtlG1awT5YcPr_H5M2Bvrw9b5JmqdKfQArcefFsc_Krd0Hc3McjNyXZQJRBq51LTcN4_tx4tknW542eEDzsfm65MqrGV2"
+       "BrOhROweGOFaLhIBLkA_wZH84ecWY14PbYt57z0RAHkJVr38RxL2cB0OHR0OXsSSlDT4TgjqeKNZ3WVf1JAro9hjB14N0KA1-6XOaCrmOSWqOwZ"
+       "iaLAxbPM8Y1BCY.egS8SjgS01xp5tbRSkGlwX5Zh_mny1Ft8X_xPMoJhOs&dib_tag=se&keywords=lian%2Bli%2Bv3000%2Bplus&qid=171"
+       "4524435&sprefix=lian%2Bli%2Bv3%2Caps%2C109&sr=8-1&th=1")
+
+headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                          " (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+           "Accept-Language": "en-US,en;q=0.9"
+           }
+
+
+request = requests.get(url=url, headers=headers)
+html = request.text
+
+soup = BeautifulSoup(html, "lxml")
+price = soup.find(name="span", class_="a-offscreen")
+price_strp = float(price.text.strip("$"))
+
+product_soup = soup.find(id="productTitle")
+product_title = product_soup.text.strip()
+
+#for testing invert greater/less than
+if price_strp < price_limit:
+    print(f"{product_title} is on sale reduced to {price_strp}\n{url}")
