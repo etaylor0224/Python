@@ -1,0 +1,44 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+
+game = True
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_experimental_option("detach", True)
+
+driver = webdriver.Chrome(options=chrome_options)
+driver.get("https://orteil.dashnet.org/experiments/cookie/")
+start = time.time()
+timeout = time.time()+60*5
+print(time.time())
+
+cookies_html = driver.find_element(By.ID, value="money")
+cookies = int(cookies_html.text.replace(",",""))
+store_lst = []
+store = driver.find_element(By.ID, value="store")
+store = store.text.split("\n")
+for index in range(len(store)):
+    if index%2 == 0:
+        store_lst.append(store[index])
+
+while game:
+    if time.time() >= timeout:
+        print(time.time())
+        game = False
+    cookie = driver.find_element(By.ID, value="cookie")
+    cookie.click()
+    now = time.time()
+    seconds = int(now - start)
+    if seconds == 5 or seconds > 5:
+        start = time.time()
+        cookies_html = driver.find_element(By.ID, value="money")
+        cookies = int(cookies_html.text.replace(",", ""))
+        for item in store_lst[::-1]:
+            item_split = item.split(" - ")
+            item_price = int(item_split[1].replace(",", ""))
+            if item_price < cookies:
+                buy = driver.find_element(By.ID, value=f"buy{item_split[0]}")
+                buy.click()
+                time.sleep(0.05)
+                print(f"bought {item_split[0]}")
