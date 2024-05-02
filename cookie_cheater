@@ -25,6 +25,7 @@ while game:
     if time.time() >= timeout:
         cook_per_sec = driver.find_element(By.ID, value="cps")
         print(cook_per_sec.text)
+        driver.quit()
         game = False
     cookie = driver.find_element(By.ID, value="cookie")
     cookie.click()
@@ -41,4 +42,3 @@ while game:
                 buy = driver.find_element(By.ID, value=f"buy{item_split[0]}")
                 buy.click()
                 time.sleep(0.05)
-                print(f"bought {item_split[0]}")
