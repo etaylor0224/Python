@@ -11,7 +11,6 @@ driver = webdriver.Chrome(options=chrome_options)
 driver.get("https://orteil.dashnet.org/experiments/cookie/")
 start = time.time()
 timeout = time.time()+60*5
-print(time.time())
 
 cookies_html = driver.find_element(By.ID, value="money")
 cookies = int(cookies_html.text.replace(",",""))
@@ -24,7 +23,8 @@ for index in range(len(store)):
 
 while game:
     if time.time() >= timeout:
-        print(time.time())
+        cook_per_sec = driver.find_element(By.ID, value="cps")
+        print(cook_per_sec.text)
         game = False
     cookie = driver.find_element(By.ID, value="cookie")
     cookie.click()
