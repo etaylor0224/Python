@@ -27,18 +27,19 @@ while game:
         print(cook_per_sec.text)
         driver.quit()
         game = False
-    cookie = driver.find_element(By.ID, value="cookie")
-    cookie.click()
-    now = time.time()
-    seconds = int(now - start)
-    if seconds == 5 or seconds > 5:
-        start = time.time()
-        cookies_html = driver.find_element(By.ID, value="money")
-        cookies = int(cookies_html.text.replace(",", ""))
-        for item in store_lst[::-1]:
-            item_split = item.split(" - ")
-            item_price = int(item_split[1].replace(",", ""))
-            if item_price < cookies:
-                buy = driver.find_element(By.ID, value=f"buy{item_split[0]}")
-                buy.click()
-                time.sleep(0.05)
+    else:
+        cookie = driver.find_element(By.ID, value="cookie")
+        cookie.click()
+        now = time.time()
+        seconds = int(now - start)
+        if seconds == 1 or seconds > 1:
+            start = time.time()
+            cookies_html = driver.find_element(By.ID, value="money")
+            cookies = int(cookies_html.text.replace(",", ""))
+            for item in store_lst[::-1]:
+                item_split = item.split(" - ")
+                item_price = int(item_split[1].replace(",", ""))
+                if item_price < cookies:
+                    buy = driver.find_element(By.ID, value=f"buy{item_split[0]}")
+                    buy.click()
+                    time.sleep(0.03)
