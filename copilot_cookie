@@ -1,3 +1,9 @@
+'''write me a python script that scrapes this website "https://orteil.dashnet.org/experiments/cookie/" every 10 seconds it needs to check the products list for available upgrades and purchase them and it needs to run for 5 minutes using selenium for web scraping'''
+
+
+
+
+
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -28,3 +34,8 @@ while time.time() < end_time:
 
 # Close the browser
 driver.quit()
+
+
+
+
+
