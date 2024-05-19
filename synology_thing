@@ -1,0 +1,49 @@
+
+def get_task_list():
+    request = requests.get(url=url, params=initial_parameters)
+    returns = request.json()
+    api_data = returns['data']
+    task_list = []
+    for task in api_data:
+        if config['tasks'][task] == 'True':
+            task_list.append(task)
+    return task_list
+
+def get_task_data(task_list):
+    request = requests.get(url=url, params=initial_parameters)
+    returns = request.json()
+    api_data = returns['data']
+    task_data = []
+    for task in task_list:
+        task_data.append({task:api_data[task]})
+    return task_data
+
+def authenticate():
+    api_auth = requests.get(url=url, params= auth_parameters)
+    api_auth.raise_for_status()
+    auth_json = api_auth.json()
+    token = auth_json['data']['synotoken']
+    return token
+
+
+def run_tasks(task_list, task_data):
+    for task in task_data:
+        print(task)
+
+def logout():
+    logout = requests.get(url=url, params=logout_params)
+    return logout.status_code
+
+def run_main():
+    tasks = get_task_list()
+    token = authenticate()
+    run_tasks(tasks)
+
+    logout()
+    pass
+
+
+if __name__ == "__main__":
+    tasks = get_task_list()
+    data = get_task_data(tasks)
+    run_tasks(tasks, data)
