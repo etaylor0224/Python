@@ -1,3 +1,25 @@
+import configparser
+import requests
+
+config = configparser.ConfigParser()
+config_file = config.read("synology-api-config.ini")
+url = config['server_info']['server_url']
+
+initial_parameters = {
+    "path": config['search_parameters']['path'],
+    "api":config['search_parameters']['api'],
+    "version": config['search_parameters']['version'],
+    "method": config['search_parameters']['method'],
+}
+auth_parameters = {
+    "api":config['authentication']['api'],
+    "version": config['authentication']['version'],
+    "method": 'login',
+    'account': config['authentication']['username'],
+    'passwd': config['authentication']['password'],
+    'enable_syno_token' : config['authentication']['token'],
+}
+
 
 def get_task_list():
     request = requests.get(url=url, params=initial_parameters)
@@ -15,35 +37,49 @@ def get_task_data(task_list):
     api_data = returns['data']
     task_data = []
     for task in task_list:
-        task_data.append({task:api_data[task]})
+        task_data.append(api_data[task])
     return task_data
 
 def authenticate():
     api_auth = requests.get(url=url, params= auth_parameters)
     api_auth.raise_for_status()
     auth_json = api_auth.json()
+    sid = auth_json['data']['sid']
     token = auth_json['data']['synotoken']
-    return token
+    return (token, sid)
 
+def run_tasks(task_list, task_data, token):
+    for index in range(len(task_list)):
+        query_params = {
+            "path": task_data[index]['path'],
+            "api": task_list[index],
+            "version": task_data[index]['maxVersion'],
+            "method": 'list_share',
+            "requestFormat": task_data[index]['requestFormat'],
+            "SynoToken": token
+        }
+        get_call = requests.get(url=url, params=query_params)
+        print(get_call.json())
 
-def run_tasks(task_list, task_data):
-    for task in task_data:
-        print(task)
-
-def logout():
+def logout(sid):
+    logout_params = {
+        "api": config['authentication']['api'],
+        "version": config['authentication']['version'],
+        "method": f'logout',
+        '_sid': sid,
+    }
     logout = requests.get(url=url, params=logout_params)
-    return logout.status_code
+    return logout.json()
 
 def run_main():
     tasks = get_task_list()
-    token = authenticate()
-    run_tasks(tasks)
+    data = get_task_data(tasks)
+    auth = authenticate()
+    token = auth[0]
+    sid = auth[1]
+    run_tasks(tasks, data, token)
 
-    logout()
-    pass
-
+    logout(sid)
 
 if __name__ == "__main__":
-    tasks = get_task_list()
-    data = get_task_data(tasks)
-    run_tasks(tasks, data)
+    run_main()
