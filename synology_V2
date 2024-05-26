@@ -1,0 +1,65 @@
+import time
+
+import synology_dsm as synology
+import configparser
+
+config = configparser.ConfigParser()
+config_file = config.read("synology-api-config.ini")
+
+dsm = synology.SynologyDSM(
+    config['authentication']['server_ip'],
+    5001,
+    config['authentication']['username'],
+    config['authentication']['password'],
+    use_https=True,
+    verify_ssl=False,
+)
+
+def check_login():
+    if dsm.login():
+        return True
+    else:
+        return False
+
+def system_information():
+    print("Gathering System Information")
+    dsm.information.update()
+    print(f"DSM Model {dsm.information.model}")
+    print(f"Temerature: {dsm.information.temperature} °C")
+    print(f"Uptime: {dsm.information.uptime}")
+
+def system_utilization():
+    print("Gathering Utilization Information")
+    dsm.utilisation.update()
+    print(f"CPU Total Load: {dsm.utilisation.cpu_total_load}%")
+    print(f"RAM Usage: {dsm.utilisation.memory_real_usage}%")
+
+def storage_usage():
+    print("Gathering Storage Utilization")
+    dsm.storage.update()
+    for volume in dsm.storage.volumes_ids:
+        print(f"For {volume}")
+        print(f"{volume} Status: {dsm.storage.volume_status(volume)}")
+        print(f"Used: {dsm.storage.volume_percentage_used(volume)}%")
+
+def disk_info():
+    print("Gather Disk Information")
+    for disk in dsm.storage.disks_ids:
+        print(f"Disk ID: {dsm.storage.disk_name(disk)}")
+        print(f"Disk Status: {dsm.storage.disk_status(disk)}")
+        print(f"Disk Temp: {dsm.storage.disk_temp(disk)}")
+
+def run_tasks():
+    if check_login():
+        system_information()
+        system_utilization()
+        storage_usage()
+        disk_info()
+    else:
+        print("Error with Login credentials")
+
+if __name__ == "__main__":
+    while True:
+        run_tasks()
+        print("Next run in 30 minutes")
+        time.sleep(1800)
