@@ -43,11 +43,25 @@ def storage_usage():
         print(f"Used: {dsm.storage.volume_percentage_used(volume)}%")
 
 def disk_info():
-    print("Gather Disk Information")
+    print("Gathering Disk Information")
     for disk in dsm.storage.disks_ids:
         print(f"Disk ID: {dsm.storage.disk_name(disk)}")
         print(f"Disk Status: {dsm.storage.disk_status(disk)}")
+        print(f"Disk SMART Status: {dsm.storage.disk_smart_status(disk)}")
         print(f"Disk Temp: {dsm.storage.disk_temp(disk)}")
+
+def upgrade_check():
+    print("Checking for DSM Updates")
+    dms_upgrade = dsm.upgrade
+    dms_upgrade.update()
+    if dms_upgrade.update_available:
+        print(f"Update Available\nPlease Upgrade DSM Version to {dms_upgrade.available_version}")
+    else:
+        print("No Updates Available at this time.")
+
+def available_api():
+    for apis in dsm.apis:
+        print(f"Available APIs are: {apis}")
 
 def run_tasks():
     if check_login():
@@ -55,11 +69,16 @@ def run_tasks():
         system_utilization()
         storage_usage()
         disk_info()
+        upgrade_check()
+        #available_api()
     else:
         print("Error with Login credentials")
 
 if __name__ == "__main__":
     while True:
         run_tasks()
-        print("Next run in 30 minutes")
-        time.sleep(1800)
+        if dsm.logout():
+            print("Next run in 30 minutes")
+            time.sleep(1800)
+        else:
+            break
