@@ -7,6 +7,9 @@ import configparser
 config = configparser.ConfigParser()
 config_file = config.read("synology-api-config.ini")
 
+date = datetime.date.today()
+timestamp = datetime.datetime.now()
+
 dsm = synology.SynologyDSM(
     config['authentication']['server_ip'],
     5001,
@@ -24,80 +27,78 @@ def check_login():
 
 def system_information():
     print("Gathering System Information\n")
+    logger = open(f"dsm-log-{date}-test.txt", 'a')
+    logger.write(f"Timestamp: {timestamp}\n\n")
     dsm.information.update()
     model_inf = dsm.information.model
     dev_temp = dsm.information.temperature
     uptime = dsm.information.uptime
+    logger.write(f"Temerature: {dev_temp} C\n")
+    logger.write(f"Uptime: {uptime} seconds\n\n")
+    logger.close()
     return dev_temp, uptime
 
 def system_utilization():
     print("Gathering Utilization Information")
+    logger = open(f"dsm-log-{date}-test.txt", 'a')
     dsm.utilisation.update()
     cpu_load = dsm.utilisation.cpu_total_load
     ram_use = dsm.utilisation.memory_real_usage
+    logger.write(f"CPU Total Load: {cpu_load}%\n")
+    logger.write(f"RAM Usage: {ram_use}%\n\n")
+    logger.close()
     return cpu_load, ram_use
 
 def storage_usage():
-    print("Gathering Storage Utilization")
     dsm.storage.update()
+    logger = open(f"dsm-log-{date}-test.txt", 'a')
     for volume in dsm.storage.volumes_ids:
         vol_stat = dsm.storage.volume_status(volume)
         vol_perc = dsm.storage.volume_percentage_used(volume)
-
+        logger.write(f"Volume ID: {volume}\n")
+        logger.write(f"Status: {vol_stat}\n")
+        logger.write(f"Used: {vol_perc}%\n\n")
+    logger.close()
     return volume, vol_stat, vol_perc
 
 
 def disk_info():
     print("Gathering Disk Information")
+    logger = open(f"dsm-log-{date}-test.txt", 'a')
     disk_dict = {}
     for disk in dsm.storage.disks_ids:
         disk_id = dsm.storage.disk_name(disk)
         disk_status = dsm.storage.disk_status(disk)
         disk_smart = dsm.storage.disk_smart_status(disk)
         disk_temp = dsm.storage.disk_temp(disk)
-        print(f"Disk ID: {disk_id}")
-        print(f"Disk Status: {disk_status}")
-        print(f"Disk SMART Status: {disk_smart}")
-        print(f"Disk Temp: {disk_temp}\n")
+        logger.write(f"Disk ID: {disk_id}\n")
+        logger.write(f"Disk Status: {disk_status}\n")
+        logger.write(f"Disk SMART Status: {disk_smart}\n")
+        logger.write(f"Disk Temp: {disk_temp}\n\n")
         disk_dict.update({disk: (disk_id,disk_status,disk_smart,disk_temp)})
+    logger.close()
     return disk_dict
 
 def upgrade_check():
     print("Checking for DSM Updates")
+    logger = open(f"dsm-log-{date}-test.txt", 'a')
     dms_upgrade = dsm.upgrade
     dms_upgrade.update()
     upgrade = dms_upgrade.update_available
     if dms_upgrade.update_available:
         print(f"Update Available\nPlease Upgrade DSM Version to {dms_upgrade.available_version}\n")
+        logger.write(f"Upgrade available: {upgrade}\n\n")
+        logger.close()
         return upgrade
     else:
         print("No Updates Available at this time.")
+        logger.write(f"Upgrade available: {upgrade}\n\n")
+        logger.close()
         return upgrade
 
 def available_api():
     for apis in dsm.apis:
         print(f"Available APIs are: {apis}")
-
-def logger(dev_inf, sys_util, vol_stat, disk, upgrade):
-    date = datetime.date.today()
-    timestamp = datetime.datetime.now()
-    disk_data = ""
-    for id in disk:
-        disks = disk[id]
-        for data in disks:
-            disk_data += f"{str(data)}\n"
-
-    log_txt = (f"Timestamp: {timestamp}\n\n"
-               f"Temerature: {dev_inf[0]} C\n"
-               f"Uptime: {dev_inf[1]} seconds\n\n"
-               f"CPU Total Load: {sys_util[0]}%\n"
-               f"RAM Usage: {sys_util[1]}%\n\n"
-               f"Volume ID: {vol_stat[0]}\n"
-               f"Status: {vol_stat[1]}\n"
-               f"Used: {vol_stat[2]}%\n\n"
-               f"Upgrade available: {upgrade}\n")
-    with open(f"syn-logger-{date}.txt", "a") as log:
-        log.write(log_txt)
 
 def run_tasks():
     if check_login():
@@ -107,19 +108,19 @@ def run_tasks():
         vol = storage_usage()
         disk = disk_info()
         upgrade = upgrade_check()
-        logger(sys_inf, sys_util, vol, disk,upgrade)
+        # logger(sys_inf, sys_util, vol, disk,upgrade)
+        # logger_updated(sys_inf, sys_util, vol, disk, upgrade)
         #available_api()
     else:
         print("Error with Login credentials")
 
-
 if __name__ == "__main__":
-    run_tasks()
-    # while True:
-    #     run_tasks()
-    #     if dsm.logout():
-    #         print("Logged Out")
-    #         print("Next run in 1 hour")
-    #         time.sleep(30)
-    #     else:
-    #         break
+    #run_tasks()
+    while True:
+        run_tasks()
+        if dsm.logout():
+            print("Logged Out")
+            print("Next run in 1 hour")
+            time.sleep(600)
+        else:
+            break
