@@ -7,9 +7,6 @@ import configparser
 config = configparser.ConfigParser()
 config_file = config.read("synology-api-config.ini")
 
-date = datetime.date.today()
-timestamp = datetime.datetime.now()
-
 dsm = synology.SynologyDSM(
     config['authentication']['server_ip'],
     5001,
@@ -20,6 +17,10 @@ dsm = synology.SynologyDSM(
 )
 
 def check_login():
+    global date
+    global timestamp
+    date = datetime.date.today()
+    timestamp = datetime.datetime.now()
     if dsm.login():
         return True
     else:
@@ -27,7 +28,7 @@ def check_login():
 
 def system_information():
     print("Gathering System Information\n")
-    logger = open(f"dsm-log-{date}-test.txt", 'a')
+    logger = open(f"dsm-log-{date}.txt", 'a')
     logger.write(f"Timestamp: {timestamp}\n\n")
     dsm.information.update()
     model_inf = dsm.information.model
@@ -40,7 +41,7 @@ def system_information():
 
 def system_utilization():
     print("Gathering Utilization Information")
-    logger = open(f"dsm-log-{date}-test.txt", 'a')
+    logger = open(f"dsm-log-{date}.txt", 'a')
     dsm.utilisation.update()
     cpu_load = dsm.utilisation.cpu_total_load
     ram_use = dsm.utilisation.memory_real_usage
@@ -51,7 +52,7 @@ def system_utilization():
 
 def storage_usage():
     dsm.storage.update()
-    logger = open(f"dsm-log-{date}-test.txt", 'a')
+    logger = open(f"dsm-log-{date}.txt", 'a')
     for volume in dsm.storage.volumes_ids:
         vol_stat = dsm.storage.volume_status(volume)
         vol_perc = dsm.storage.volume_percentage_used(volume)
@@ -64,7 +65,7 @@ def storage_usage():
 
 def disk_info():
     print("Gathering Disk Information")
-    logger = open(f"dsm-log-{date}-test.txt", 'a')
+    logger = open(f"dsm-log-{date}.txt", 'a')
     disk_dict = {}
     for disk in dsm.storage.disks_ids:
         disk_id = dsm.storage.disk_name(disk)
@@ -81,7 +82,7 @@ def disk_info():
 
 def upgrade_check():
     print("Checking for DSM Updates")
-    logger = open(f"dsm-log-{date}-test.txt", 'a')
+    logger = open(f"dsm-log-{date}.txt", 'a')
     dms_upgrade = dsm.upgrade
     dms_upgrade.update()
     upgrade = dms_upgrade.update_available
@@ -108,19 +109,16 @@ def run_tasks():
         vol = storage_usage()
         disk = disk_info()
         upgrade = upgrade_check()
-        # logger(sys_inf, sys_util, vol, disk,upgrade)
-        # logger_updated(sys_inf, sys_util, vol, disk, upgrade)
         #available_api()
     else:
         print("Error with Login credentials")
 
 if __name__ == "__main__":
-    #run_tasks()
     while True:
         run_tasks()
         if dsm.logout():
             print("Logged Out")
             print("Next run in 1 hour")
-            time.sleep(600)
+            time.sleep(1800)
         else:
             break
